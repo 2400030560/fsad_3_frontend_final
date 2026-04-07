@@ -15,7 +15,7 @@ export default function AssessmentQuiz() {
   const [assessment, setAssessment] = useState(null);
 
   useEffect(() => {
-    fetch("http://localhost:8080/api/assessments")
+    fetch("https://fsad30project-production.up.railway.app/api/assessments")
       .then(res => res.json())
       .then(data => {
         const found = data.find(a => a.id === parseInt(id));
@@ -28,8 +28,6 @@ export default function AssessmentQuiz() {
   const [selected, setSelected] = useState(null);
   const [submitted, setSubmitted] = useState(false);
 
-  // ⛔ Backend doesn’t have questions yet
-  // so we keep fallback
   if (!assessment) {
     return (
       <div className="page-wrapper">
@@ -77,18 +75,17 @@ export default function AssessmentQuiz() {
       setCurrent(current + 1);
       setSelected(null);
     } else {
-      // ✅ Calculate total score
       const totalScore = newAnswers.reduce((sum, val) => sum + val, 0);
 
       // 🔥 SEND TO BACKEND
-      fetch("http://localhost:8080/api/results", {
+      fetch("https://fsad30project-production.up.railway.app/api/results", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
           totalScore: totalScore,
-          userId: 1,              // ⚠️ replace later with logged-in user
+          userId: 1,
           assessmentId: assessment.id
         })
       });

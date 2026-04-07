@@ -14,7 +14,7 @@ export default function AssessmentList() {
 
   // ✅ FETCH from backend
   useEffect(() => {
-    fetch("http://localhost:8080/api/assessments")
+    fetch("https://fsad30project-production.up.railway.app/api/assessments")
       .then((res) => res.json())
       .then((data) => setAssessments(data))
       .catch((err) => console.error(err));

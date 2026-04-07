@@ -14,11 +14,10 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      // 🔥 fetch users from backend
-      const response = await fetch("http://localhost:8080/api/users");
+      // 🔥 fetch users from backend (FIXED URL)
+      const response = await fetch("https://fsad30project-production.up.railway.app/api/users");
       const users = await response.json();
 
-      // 🔍 find matching student
       const student = users.find(
         (u) => u.email === email && u.role === "STUDENT"
       );

@@ -2,16 +2,11 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import StudentNav from "../../components/student/StudentNav";
-// ❌ REMOVE mockData
-// import { assessments } from "../../data/mockData";
-import { useAssessment } from "../../context/AssessmentContext";
 
 export default function AssessmentQuiz() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { submitResult } = useAssessment();
 
-  // ✅ ADD state for backend data
   const [assessment, setAssessment] = useState(null);
 
   useEffect(() => {
@@ -42,7 +37,7 @@ export default function AssessmentQuiz() {
     );
   }
 
-  // ⚠️ TEMP fallback (since backend doesn't store questions yet)
+  // ✅ temporary questions
   const questions = [
     {
       text: "Do you enjoy problem solving?",
@@ -65,7 +60,7 @@ export default function AssessmentQuiz() {
   const question = questions[current];
   const progress = (current / questions.length) * 100;
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (selected === null) return;
 
     const newAnswers = [...answers, selected];
@@ -77,16 +72,14 @@ export default function AssessmentQuiz() {
     } else {
       const totalScore = newAnswers.reduce((sum, val) => sum + val, 0);
 
-      // 🔥 SEND TO BACKEND
-      fetch("https://fsad30project-production.up.railway.app/api/results", {
+      // 🔥 FIXED API CALL (THIS IS THE KEY)
+      await fetch("https://fsad30project-production.up.railway.app/api/results/submit", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          totalScore: totalScore,
-          userId: 1,
-          assessmentId: assessment.id
+          totalScore: totalScore
         })
       });
 

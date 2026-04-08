@@ -7,7 +7,7 @@ export default function Results() {
 
   const [results, setResults] = useState([]);
 
-  // ✅ Fetch from deployed backend (FIXED)
+  // ✅ Fetch from backend
   useEffect(() => {
     fetch("https://fsad30project-production.up.railway.app/api/results")
       .then(res => res.json())
@@ -50,18 +50,27 @@ export default function Results() {
             <div className="result-header">
               <span className="result-icon">📊</span>
               <div>
-                {/* ✅ Safe display */}
-                <h2>Assessment: {result.assessment?.id || "N/A"}</h2>
+                
+                {/* 🔥 FIX: show TITLE instead of ID */}
+                <h2>
+                  Assessment: {result.assessment?.title || "Unknown Assessment"}
+                </h2>
+
                 <span className="result-date">
-                  Score: {result.totalScore}
+                  Score: {result.totalScore ?? "N/A"}
                 </span>
               </div>
             </div>
 
             <div className="recommendations-section">
               <h3>Recommendation</h3>
-              {/* ✅ Handle null safely */}
-              <p>{result.recommendation || "No recommendation available"}</p>
+
+              {/* 🔥 FIX: better fallback */}
+              <p>
+                {result.recommendation 
+                  ? result.recommendation 
+                  : "No recommendation available"}
+              </p>
             </div>
           </div>
         ))}

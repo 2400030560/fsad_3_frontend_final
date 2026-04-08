@@ -37,7 +37,7 @@ export default function AssessmentQuiz() {
     );
   }
 
-  // ✅ temporary questions
+  // ✅ Temporary questions
   const questions = [
     {
       text: "Do you enjoy problem solving?",
@@ -72,18 +72,29 @@ export default function AssessmentQuiz() {
     } else {
       const totalScore = newAnswers.reduce((sum, val) => sum + val, 0);
 
-      // 🔥 FIXED API CALL (THIS IS THE KEY)
-      await fetch("https://fsad30project-production.up.railway.app/api/results/submit", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          totalScore: totalScore
-        })
-      });
+      try {
+        // 🔥 FINAL FIX (SEND FULL DATA)
+        await fetch("https://fsad30project-production.up.railway.app/api/results/submit", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            totalScore: totalScore,
+            assessment: {
+              id: parseInt(id)
+            },
+            user: {
+              id: 1
+            }
+          })
+        });
 
-      setSubmitted(true);
+        setSubmitted(true);
+
+      } catch (err) {
+        console.error("Error submitting result:", err);
+      }
     }
   };
 
@@ -128,6 +139,7 @@ export default function AssessmentQuiz() {
 
           <div className="quiz-card">
             <h3 className="question-text">{question.text}</h3>
+
             <div className="options-list">
               {question.options.map((opt, idx) => (
                 <button
@@ -148,7 +160,9 @@ export default function AssessmentQuiz() {
               onClick={handleNext}
               disabled={selected === null}
             >
-              {current === questions.length - 1 ? "Submit Assessment ✓" : "Next Question →"}
+              {current === questions.length - 1
+                ? "Submit Assessment ✓"
+                : "Next Question →"}
             </button>
           </div>
         </div>

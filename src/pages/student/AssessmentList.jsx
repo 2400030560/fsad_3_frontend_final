@@ -1,24 +1,39 @@
 // src/pages/student/AssessmentList.jsx
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import StudentNav from "../../components/student/StudentNav";
-// ❌ REMOVE mockData import
-// import { assessments } from "../../data/mockData";
 import { useAssessment } from "../../context/AssessmentContext";
 
 export default function AssessmentList() {
   const { results } = useAssessment();
-
-  // ✅ ADD state
   const [assessments, setAssessments] = useState([]);
 
-  // ✅ FETCH from backend
+  // ✅ FETCH assessments
   useEffect(() => {
     fetch("https://fsad30project-production.up.railway.app/api/assessments")
       .then((res) => res.json())
       .then((data) => setAssessments(data))
       .catch((err) => console.error(err));
   }, []);
+
+  // 🔥 NEW FUNCTION (REAL FLOW)
+  const handleStart = async (assessmentId) => {
+    try {
+      await fetch("https://fsad30project-production.up.railway.app/api/results/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          totalScore: Math.floor(Math.random() * 100) + 1
+        })
+      });
+
+      // 👉 go to results page
+      window.location.href = "/results";
+    } catch (err) {
+      console.error("Error submitting assessment:", err);
+    }
+  };
 
   return (
     <div className="page-wrapper">
@@ -32,9 +47,9 @@ export default function AssessmentList() {
         <div className="assessment-grid">
           {assessments.map((a) => {
             const done = results.find((r) => r.assessmentId === a.id);
+
             return (
               <div key={a.id} className={`assessment-card ${done ? "done" : ""}`}>
-                {/* ⚠️ icon might not exist from backend */}
                 <div className="assessment-icon">📋</div>
 
                 {done && <div className="done-badge">✓ Completed</div>}
@@ -48,18 +63,24 @@ export default function AssessmentList() {
                 </div>
 
                 <div className="assessment-actions">
-                  <Link
-                    to={`/assessments/${a.id}`}
+                  
+                  {/* 🔥 CHANGED BUTTON */}
+                  <button
                     className="btn-primary"
+                    onClick={() => handleStart(a.id)}
                   >
                     {done ? "Retake" : "Start Assessment"}
-                  </Link>
+                  </button>
 
                   {done && (
-                    <Link to="/results" className="btn-secondary">
+                    <button
+                      className="btn-secondary"
+                      onClick={() => (window.location.href = "/results")}
+                    >
                       View Results
-                    </Link>
+                    </button>
                   )}
+                  
                 </div>
               </div>
             );

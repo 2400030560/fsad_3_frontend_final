@@ -7,9 +7,9 @@ export default function Results() {
 
   const [results, setResults] = useState([]);
 
-  // ✅ Fetch from backend
+  // ✅ Fetch from deployed backend (FIXED)
   useEffect(() => {
-    fetch("http://localhost:8080/api/results")
+    fetch("https://fsad30project-production.up.railway.app/api/results")
       .then(res => res.json())
       .then(data => setResults(data))
       .catch(err => console.error(err));
@@ -50,14 +50,18 @@ export default function Results() {
             <div className="result-header">
               <span className="result-icon">📊</span>
               <div>
-                <h2>Assessment ID: {result.assessment?.id}</h2>
-                <span className="result-date">Score: {result.totalScore}</span>
+                {/* ✅ Safe display */}
+                <h2>Assessment: {result.assessment?.id || "N/A"}</h2>
+                <span className="result-date">
+                  Score: {result.totalScore}
+                </span>
               </div>
             </div>
 
             <div className="recommendations-section">
               <h3>Recommendation</h3>
-              <p>{result.recommendation}</p>
+              {/* ✅ Handle null safely */}
+              <p>{result.recommendation || "No recommendation available"}</p>
             </div>
           </div>
         ))}

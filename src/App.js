@@ -7,6 +7,7 @@ import ProtectedRoute from "./components/common/ProtectedRoute";
 
 // Student Pages
 import Login from "./pages/student/Login";
+import Signup from "./pages/student/Signup";
 import Dashboard from "./pages/student/Dashboard";
 import CareerLibrary from "./pages/student/CareerLibrary";
 import CareerDetail from "./pages/student/CareerDetail";
@@ -34,6 +35,7 @@ function App() {
 
             {/* Public Routes */}
             <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Signup />} />
             <Route path="/admin/login" element={<AdminLogin />} />
 
             {/* Student Routes */}

@@ -15,9 +15,8 @@ export default function Login() {
 
     try {
       // 🔥 fetch users from backend (FIXED URL)
-      const response = await fetch("https://fsad30project-production.up.railway.app/api/users");
+      const response = await fetch("https://30backend-production.up.railway.app/api/users");
       const users = await response.json();
-
       const student = users.find(
         (u) => u.email === email && u.role === "STUDENT"
       );
@@ -75,6 +74,13 @@ export default function Login() {
         <div className="auth-footer">
           <p className="demo-hint">
             Demo: <strong>alex@student.com</strong> / <strong>pass123</strong>
+          </p>
+
+          <p>
+            Don't have an account?{" "}
+            <Link to="/register" className="alt-link">
+              Create Account →
+            </Link>
           </p>
 
           <Link to="/admin/login" className="alt-link">

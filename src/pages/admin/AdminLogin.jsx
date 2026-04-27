@@ -15,7 +15,7 @@ export default function AdminLogin() {
 
     try {
       // 🔥 Call backend
-      const response = await fetch("http://localhost:8080/api/users");
+      const response = await fetch("https://30backend-production.up.railway.app/api/users");
 
       const users = await response.json();
 

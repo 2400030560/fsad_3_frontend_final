@@ -10,7 +10,7 @@ export default function AssessmentList() {
 
   // ✅ Fetch assessments from backend
   useEffect(() => {
-    fetch("https://fsad30project-production.up.railway.app/api/assessments")
+    fetch("https://30backend-production.up.railway.app/api/assessments")
       .then((res) => res.json())
       .then((data) => setAssessments(data))
       .catch((err) => console.error(err));

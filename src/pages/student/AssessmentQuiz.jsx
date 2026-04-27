@@ -10,7 +10,7 @@ export default function AssessmentQuiz() {
   const [assessment, setAssessment] = useState(null);
 
   useEffect(() => {
-    fetch("https://fsad30project-production.up.railway.app/api/assessments")
+    fetch("https://30backend-production.up.railway.app/api/assessments")
       .then(res => res.json())
       .then(data => {
         const found = data.find(a => a.id === parseInt(id));
@@ -73,8 +73,7 @@ export default function AssessmentQuiz() {
       const totalScore = newAnswers.reduce((sum, val) => sum + val, 0);
 
       try {
-        // 🔥 FINAL FIX (SEND FULL DATA)
-        await fetch("https://fsad30project-production.up.railway.app/api/results/submit", {
+        await fetch("https://30backend-production.up.railway.app/api/results/submit", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"

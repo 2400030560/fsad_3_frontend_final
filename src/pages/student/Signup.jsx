@@ -6,6 +6,7 @@ export default function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [role, setRole] = useState("STUDENT");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -41,7 +42,7 @@ export default function Signup() {
         body: JSON.stringify({
           email: email,
           password: password,
-          role: "STUDENT",
+          role,
         }),
       });
 
@@ -105,6 +106,30 @@ export default function Signup() {
               disabled={loading}
             />
           </div>
+
+          <div className="form-group">
+            <button
+              type="button"
+              className="btn-secondary btn-full"
+              onClick={() => setRole("STUDENT")}
+              disabled={loading}
+            >
+              Sign up as Student
+            </button>
+          </div>
+
+          <div className="form-group">
+            <button
+              type="button"
+              className="btn-secondary btn-full"
+              onClick={() => setRole("ADMIN")}
+              disabled={loading}
+            >
+              Sign up as Admin
+            </button>
+          </div>
+
+          <p>Selected role: {role}</p>
 
           {error && <div className="error-msg">{error}</div>}
 

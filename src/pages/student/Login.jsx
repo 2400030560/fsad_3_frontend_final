@@ -18,10 +18,10 @@ export default function Login() {
       const response = await fetch("https://30backend-production.up.railway.app/api/users");
       const users = await response.json();
       const student = users.find(
-        (u) => u.email === email && u.role === "STUDENT"
+        (u) => u.email === email && u.password === password && u.role === "STUDENT"
       );
 
-      if (student && password === "pass123") {
+      if (student) {
         loginStudent(email, password);
         navigate("/dashboard");
       } else {

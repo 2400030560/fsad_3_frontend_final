@@ -8,36 +8,18 @@ export default function Login() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     const trimmedEmail = email.trim();
 
-    console.log("Sending:", trimmedEmail, password);
-
-    try {
-      const response = await fetch("https://30backend-production.up.railway.app/api/users/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          email: trimmedEmail,
-          password
-        })
-      });
-
-      console.log("Response:", response.status);
-
-      if (response.ok) {
-        const user = await response.json();
-        localStorage.setItem("user", JSON.stringify(user));
-        navigate("/dashboard");
-      } else {
-        setError("Invalid email or password");
-      }
-    } catch (err) {
-      console.error(err);
+    if (trimmedEmail === "alex@student.com" && password === "pass123") {
+      navigate("/dashboard");
+    } else if (trimmedEmail === "meghana@gmail.com" && password === "123456") {
+      navigate("/dashboard");
+    } else if (trimmedEmail === "admin@careerapp.com" && password === "admin123") {
+      navigate("/admin");
+    } else {
       setError("Invalid email or password");
     }
   };
@@ -83,7 +65,9 @@ export default function Login() {
 
         <div className="auth-footer">
           <p className="demo-hint">
-            Demo: <strong>alex@student.com</strong> / <strong>pass123</strong>
+            Student: <strong>alex@student.com</strong> / <strong>pass123</strong><br />
+            Student: <strong>meghana@gmail.com</strong> / <strong>123456</strong><br />
+            Admin: <strong>admin@careerapp.com</strong> / <strong>admin123</strong>
           </p>
 
           <p>

@@ -18,14 +18,14 @@ export default function Login() {
       const response = await fetch("https://30backend-production.up.railway.app/api/users");
       const users = await response.json();
       const student = users.find(
-        (u) => u.email === email && u.password === password && u.role === "STUDENT"
+        (u) => u.email === email && u.password === password
       );
 
       if (student) {
         loginStudent(email, password);
         navigate("/dashboard");
       } else {
-        setError("Invalid email or password. Try alex@student.com / pass123");
+        setError("Invalid email or password");
       }
     } catch (err) {
       setError("Server error. Make sure backend is running.");

@@ -1,17 +1,19 @@
 // src/pages/student/Login.jsx
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const { loginStudent } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const trimmedEmail = email.trim();
+
+    console.log("Sending:", trimmedEmail, password);
 
     try {
       const response = await fetch("https://30backend-production.up.railway.app/api/users/login", {
@@ -20,20 +22,23 @@ export default function Login() {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          email,
+          email: trimmedEmail,
           password
         })
       });
 
+      console.log("Response:", response.status);
+
       if (response.ok) {
-        const data = await response.json();
-        loginStudent(email, password);
+        const user = await response.json();
+        localStorage.setItem("user", JSON.stringify(user));
         navigate("/dashboard");
       } else {
         setError("Invalid email or password");
       }
     } catch (err) {
-      setError("Server error. Make sure backend is running.");
+      console.error(err);
+      setError("Invalid email or password");
     }
   };
 

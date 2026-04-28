@@ -1,26 +1,34 @@
 // src/pages/student/Login.jsx
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const { loginStudent } = useAuth();
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const trimmedEmail = email.trim();
+    try {
+      // 🔥 fetch users from backend (FIXED URL)
+      const response = await fetch("https://30backend-production.up.railway.app/api/users");
+      const users = await response.json();
+      const student = users.find(
+        (u) => u.email === email && u.role === "STUDENT"
+      );
 
-    if (trimmedEmail === "alex@student.com" && password === "pass123") {
-      navigate("/dashboard");
-    } else if (trimmedEmail === "meghana@gmail.com" && password === "123456") {
-      navigate("/dashboard");
-    } else if (trimmedEmail === "admin@careerapp.com" && password === "admin123") {
-      navigate("/admin");
-    } else {
-      setError("Invalid email or password");
+      if (student && password === "pass123") {
+        loginStudent(email, password);
+        navigate("/dashboard");
+      } else {
+        setError("Invalid email or password. Try alex@student.com / pass123");
+      }
+    } catch (err) {
+      setError("Server error. Make sure backend is running.");
     }
   };
 
@@ -65,9 +73,7 @@ export default function Login() {
 
         <div className="auth-footer">
           <p className="demo-hint">
-            Student: <strong>alex@student.com</strong> / <strong>pass123</strong><br />
-            Student: <strong>meghana@gmail.com</strong> / <strong>123456</strong><br />
-            Admin: <strong>admin@careerapp.com</strong> / <strong>admin123</strong>
+            Demo: <strong>alex@student.com</strong> / <strong>pass123</strong>
           </p>
 
           <p>

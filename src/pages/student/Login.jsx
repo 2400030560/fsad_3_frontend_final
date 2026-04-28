@@ -1,43 +1,39 @@
 // src/pages/student/Login.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [users, setUsers] = useState([]);
+  const [error, setError] = useState("");
   const { loginStudent } = useAuth();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await fetch("https://30backend-production.up.railway.app/api/users");
-        const data = await response.json();
-        setUsers(data);
-      } catch (err) {
-        console.error("Failed to fetch users:", err);
-      }
-    };
-    fetchUsers();
-  }, []);
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("Users:", users);
-    console.log("Entered:", email, password);
+    try {
+      const response = await fetch("https://30backend-production.up.railway.app/api/users/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          email,
+          password
+        })
+      });
 
-    const student = users.find(
-      (u) => u.email.trim() === email.trim() && u.password === password
-    );
-
-    if (student) {
-      loginStudent(email, password);
-      navigate("/dashboard");
-    } else {
-      alert("Invalid credentials");
+      if (response.ok) {
+        const data = await response.json();
+        loginStudent(email, password);
+        navigate("/dashboard");
+      } else {
+        setError("Invalid email or password");
+      }
+    } catch (err) {
+      setError("Server error. Make sure backend is running.");
     }
   };
 
@@ -72,6 +68,8 @@ export default function Login() {
               required
             />
           </div>
+
+          {error && <div className="error-msg">{error}</div>}
 
           <button type="submit" className="btn-primary btn-full">
             Sign In
